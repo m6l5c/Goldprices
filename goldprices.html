@@ -6,156 +6,150 @@
     <title>مجوهرات الحسناء الذهبية</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #d32f2f; /* اللون العنابي */
+            background-color: #800000;
             color: #fff;
-        }
-        .container {
-            max-width: 800px;
-            margin: 30px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            color: #000; /* النص داخل الحاوية باللون الأسود */
+            font-family: Arial, sans-serif;
+            text-align: center;
         }
         h1 {
-            text-align: center;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            font-size: 2em;
         }
-        .contact-info {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 1.1em;
-        }
-        table {
-            width: 100%;
+        .prices {
+            margin: 20px auto;
+            width: 80%;
             border-collapse: collapse;
-            margin-top: 20px;
         }
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
+        .prices th, .prices td {
+            border: 1px solid #fff;
+            padding: 10px;
         }
-        th {
-            background-color: #f4f4f4;
-            color: #333;
-            font-weight: bold;
+        .prices th {
+            background-color: #b03060;
         }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
+        .prices tr:nth-child(even) {
+            background-color: #b22222;
         }
-        tr:nth-child(odd) {
-            background-color: #eeeeee;
+        .prices tr:nth-child(odd) {
+            background-color: #dc143c;
         }
-        tr:hover {
-            background-color: #ddd;
+        .gold-price {
+            font-size: 1.5em;
+            color: #000;
         }
-        .ounce-price {
-            font-size: 0.6em; /* حجم الخط أصغر بمرتين */
-            text-align: right; /* محاذاة إلى اليمين */
-        }
-        .ounce-price span {
-            font-weight: bold;
-            color: #007bff;
+        .gold-oz {
+            font-size: 0.75em;
+            color: #000;
+            margin: 20px auto;
         }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <h1>
-        مجوهرات الحسناء الذهبية
-        <span class="ounce-price">سعر الأونصة بالدولار: <span id="ounce-price">--</span></span>
-    </h1>
-    <div class="contact-info">
-        <p>رقم الهاتف: 24752020</p>
-        <p>رقم الهاتف: 55334534</p>
+    <h1>مجوهرات الحسناء الذهبية</h1>
+    <p>24752020 - 55334534</p>
+    <div id="gold-oz" class="gold-oz"></div>
+    <!-- TradingView Widget BEGIN -->
+    <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+        <div class="tradingview-widget-copyright">
+            <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">
+                <span class="blue-text">Track all markets on TradingView</span>
+            </a>
+        </div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
+        {
+        "symbol": "OANDA:XAUUSD",
+        "width": 350,
+        "isTransparent": false,
+        "colorTheme": "dark",
+        "locale": "en"
+        }
+        </script>
     </div>
-    <table>
+    <!-- TradingView Widget END -->
+    <table class="prices">
         <thead>
-        <tr>
-            <th>القيراط</th>
-            <th>المبيع (دينار كويتي)</th>
-            <th>الشراء (دينار كويتي)</th>
-        </tr>
+            <tr>
+                <th>القيراط</th>
+                <th>المبيع (دينار كويتي)</th>
+                <th>الشراء (دينار كويتي)</th>
+            </tr>
         </thead>
-        <tbody id="gold-prices">
-        <!-- سيتم تحديث الأسعار هنا -->
+        <tbody>
+            <tr>
+                <td>24 قيراط</td>
+                <td id="price-24k" class="gold-price"></td>
+                <td id="sell-24k" class="gold-price"></td>
+            </tr>
+            <tr>
+                <td>22 قيراط</td>
+                <td id="price-22k" class="gold-price"></td>
+                <td id="sell-22k" class="gold-price"></td>
+            </tr>
+            <tr>
+                <td>21 قيراط</td>
+                <td id="price-21k" class="gold-price"></td>
+                <td id="sell-21k" class="gold-price"></td>
+            </tr>
+            <tr>
+                <td>18 قيراط</td>
+                <td id="price-18k" class="gold-price"></td>
+                <td id="sell-18k" class="gold-price"></td>
+            </tr>
         </tbody>
     </table>
-</div>
+    <div id="error" style="color: red;"></div>
 
-<script>
-    async function fetchGoldPrices() {
-        try {
-            // جلب سعر الأونصة بالدولار الأمريكي
-            const responseUSD = await fetch('https://www.goldapi.io/api/XAU/USD', {
-                headers: {
-                    'x-access-token': 'goldapi-1wm6lslyvc9oll-io', // استخدم مفتاح API الجديد هنا
-                    'Content-Type': 'application/json'
-                }
-            });
+    <script>
+        const GOLD_API_KEY = '69f30528c69bf1b4fdad4a7e489acee7'; // مفتاح API الخاص بـ Metalprice API
+        const EXCHANGE_API_KEY = '4ee45be8392e67d8da6cf6e9'; // مفتاح API الخاص بسعر الصرف
 
-            if (!responseUSD.ok) {
-                console.error('Error fetching data from USD API:', responseUSD.status, responseUSD.statusText);
-                throw new Error('Error fetching data from USD API');
+        async function fetchGoldPrices() {
+            try {
+                // جلب سعر صرف الدولار الأمريكي إلى الدينار الكويتي
+                const exchangeResponse = await fetch(`https://v6.exchangerate-api.com/v6/${EXCHANGE_API_KEY}/latest/USD`);
+                const exchangeData = await exchangeResponse.json();
+                const usdToKWD = exchangeData.conversion_rates.KWD;
+
+                // جلب سعر الذهب من Metalprice API
+                const goldResponse = await fetch(`https://api.metalpriceapi.com/v1/latest?api_key=${GOLD_API_KEY}&base=USD&currencies=XAU`);
+                const goldData = await goldResponse.json();
+                const goldPriceUSD = goldData.rates.XAU;
+
+                if (!goldPriceUSD) throw new Error('Unable to retrieve gold price');
+
+                // إضافة 2415 دولار إلى سعر الأونصة
+                const goldPricePlus2415 = goldPriceUSD + 2415;
+
+                // حساب الأسعار
+                const price24K = (goldPricePlus2415 / 31.10) * usdToKWD;
+                const price22K = (goldPricePlus2415 / 31.10) * 0.9166 * usdToKWD;
+                const price21K = (goldPricePlus2415 / 31.10) * 0.875 * usdToKWD;
+                const price18K = (goldPricePlus2415 / 31.10) * 0.750 * usdToKWD;
+
+                // حساب أسعار الشراء
+                const sell24K = price24K * (1 - 0.025);
+                const sell22K = price22K * (1 - 0.0375);
+                const sell21K = price21K * (1 - 0.04);
+                const sell18K = price18K * (1 - 0.0425);
+
+                // عرض الأسعار
+                document.getElementById('gold-oz').innerText = `سعر الأونصة بالدولار الأمريكي: ${goldPriceUSD.toFixed(2)} $`;
+                document.getElementById('price-24k').innerText = price24K.toFixed(3);
+                document.getElementById('sell-24k').innerText = sell24K.toFixed(3);
+                document.getElementById('price-22k').innerText = price22K.toFixed(3);
+                document.getElementById('sell-22k').innerText = sell22K.toFixed(3);
+                document.getElementById('price-21k').innerText = price21K.toFixed(3);
+                document.getElementById('sell-21k').innerText = sell21K.toFixed(3);
+                document.getElementById('price-18k').innerText = price18K.toFixed(3);
+                document.getElementById('sell-18k').innerText = sell18K.toFixed(3);
+
+            } catch (error) {
+                document.getElementById('error').innerText = 'Error fetching data: ' + error.message;
             }
-
-            const dataUSD = await responseUSD.json();
-            const ouncePriceInUSD = dataUSD.price;
-
-            // جلب سعر الأونصة بالدينار الكويتي
-            const responseKWD = await fetch('https://www.goldapi.io/api/XAU/KWD', {
-                headers: {
-                    'x-access-token': 'goldapi-1wm6lslyvc9oll-io', // استخدم مفتاح API الجديد هنا
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (!responseKWD.ok) {
-                console.error('Error fetching data from KWD API:', responseKWD.status, responseKWD.statusText);
-                throw new Error('Error fetching data from KWD API');
-            }
-
-            const dataKWD = await responseKWD.json();
-            const ouncePriceInKWD = dataKWD.price;
-
-            // تحويل سعر الأونصة إلى أسعار القيراطات المختلفة
-            const prices = {
-                "24": (ouncePriceInKWD / 31.1035).toFixed(2),
-                "22": (ouncePriceInKWD / 31.1035 * 0.916).toFixed(2),
-                "21": (ouncePriceInKWD / 31.1035 * 0.875).toFixed(2),
-                "18": (ouncePriceInKWD / 31.1035 * 0.75).toFixed(2)
-            };
-
-            const goldPricesElement = document.getElementById('gold-prices');
-            goldPricesElement.innerHTML = '';
-
-            // إضافة السعر وشراء السعر
-            for (const [carat, price] of Object.entries(prices)) {
-                let buyPrice = (carat === "18" ? price - 0.750 : price - 0.500).toFixed(2);
-                goldPricesElement.innerHTML += `<tr><td>${carat} قيراط</td><td>${price}</td><td>${buyPrice}</td></tr>`;
-            }
-
-            document.getElementById('ounce-price').innerText = ouncePriceInUSD.toFixed(2);
-
-        } catch (error) {
-            console.error('Error fetching gold prices:', error);
-            document.getElementById('gold-prices').innerHTML = '<tr><td colspan="3">فشل في جلب البيانات. حاول مرة أخرى لاحقًا.</td></tr>';
-            document.getElementById('ounce-price').innerText = '--';
         }
-    }
 
-    setInterval(fetchGoldPrices, 15000);
-    fetchGoldPrices();  // Initial fetch
-</script>
-
+        setInterval(fetchGoldPrices, 30000);
+        window.onload = fetchGoldPrices;
+    </script>
 </body>
 </html>
